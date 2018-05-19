@@ -104,8 +104,8 @@
   * [WPS](wps.md)
 * [Physical access to machine](physical_access_to_machine.md)
 * [new # TODO - edwda.md](# TODO - edwda.md)
-* [Literature](littearature.md)
+* [KALI.md](# TODO - KALI.md)
 
-* [Literature](littearature.md)
+* [Paswords](# TODO - Paswords.md)
 
 
