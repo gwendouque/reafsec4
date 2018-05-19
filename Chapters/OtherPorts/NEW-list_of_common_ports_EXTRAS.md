@@ -1,5 +1,4 @@
-# -------------
-##  ----EXTRA-----:
+# EXTRA:
 
 # Enumerating
 
@@ -114,6 +113,110 @@ EHLO barry
 250 HELP
 AUTH LOGIN
 ````
+
+# SMTP
+
+
+#### SMTP relay, EXPN/VRFY command enabled
+```
+telnet <target IP> 25
+helo root
+mail from: root@target.com
+rcpt to: jsmith@gmail.com
+DATA
+Subject: Testing open mail relay.
+Testing SMTP open mail relay. Have a nice day.
+.
+quit
+```
+
+```
+
+for x in $(cat users.txt); do echo VRFY $x | nc -nv -w 1 <target IP> 25 2>/dev/null | grep ^’250’; done
+```
+
+```
+
+sendEmail -f root@target.com -t jsmith@gmail.com -u Testing open mail relay. -m Testing SMTP open mail relay. Have a nice day. -s <target IP>
+```
+
+#### SMTP Service STARTTLS Plaintext Command Injection
+```
+telnet <target IP> 25
+S: <waits for connection on TCP port 25>
+C: <opens connection>
+S: 220 mail.target.com SMTP service ready
+C: EHLO mail.ietf.org
+S: 250-mail.target.com offers a warm hug of welcome
+S: 250 STARTTLS
+C: STARTTLS
+S: 220 Go ahead
+```
+
+
+###  Internal IPs
+```
+When viewing test email, view the full headers and look for internal IPs and host names.
+```
+
+```
+
+STARTTLS\r\nRSET\r\n
+
+And the server sent the following two responses:
+220 Server ready Ready to start TLS
+250 +OK Reset
+```
+
+
+```
+
+HELO <anything>
+Identical to/from - mail from: <nobody@domain> rcpt to: <nobody@domain>
+Unknown domain - mail from: <user@unknown_domain>
+Domain not present - mail from: <user@localhost>
+Domain not supplied - mail from: <user>
+Source address omission - mail from: <> rcpt to: <nobody@recipient_domain>
+Use IP address of target server - mail from: <user@IP_Address> rcpt to: <nobody@recipient_domain>
+Use double quotes - mail from: <user@domain> rcpt to: <"user@recipent-domain">
+User IP address of the target server - mail from: <user@domain> rcpt to: <nobody@recipient_domain@[IP Address]>
+Disparate formatting - mail from: <user@[IP Address]> rcpt to: <@domain:nobody@recipient-domain>
+Disparate formatting2 - mail from: <user@[IP Address]> rcpt to: <recipient_domain!nobody@[IP Address]>
+```
+
+```
+
+#!/bin/bash
+clear
+
+echo "SMTP open mail relay checker."
+
+if [[ $1 == "" ]]; then
+     echo "ERROR - Specify host."
+else
+     if [[ $2 == "" ]]; then
+          PORT=25
+     else
+          PORT=$2
+     fi
+
+     cat >> tmp << EOF
+     mail from: root@target.com
+     rcpt to: jsmith@gmail.com
+     data
+     Subject: Testing open mail relay.
+     Testing SMTP open mail relay from $1.
+     Have a nice day.
+     .
+     quit
+     EOF
+
+     echo "[*] Using target $1:$PORT"
+     cat tmp | nc $1 $PORT
+     rm tmp
+fi
+```
+
 
 # TFTP - UDP 69
 
@@ -361,6 +464,41 @@ onesixtyone -c /usr/share/wordlists/dirb/small.txt 192.168.1.200  // find commun
 ```
 for i in $(cat /usr/share/wordlists/metasploit/unix_users.txt);do snmpwalk -v 1 -c $i 192.168.1.200;done| grep -e "Timeout" // find communities with bruteforce
 ```
+# SNMP
+
+
+### Default or Guessable SNMP Community Strings
+```
+onesixtyone -c <password list> -i <target list>
+
+snmpcheck -t <target IP> <private/public>
+```
+
+### Read-only Community String of 'public'
+
+##### Enumerating MIB tree
+
+
+```
+snmpwalk -c public -v1 <target IP>    
+
+```
+
+
+##### MS Windows parameters
+
+
+```
+snmpwalk -c public -v1 <target IP> 1.3.6.1.2.1.25.1.6.0       # System processes
+snmpwalk -c public -v1 <target IP> 1.3.6.1.2.1.25.4.2.1.2     # Running processes
+snmpwalk -c public -v1 <target IP> 1.3.6.1.2.1.25.4.2.1.4     # Processes path
+snmpwalk -c public -v1 <target IP> 1.3.6.1.2.1.25.2.3.1.4     # Storage units
+snmpwalk -c public -v1 <target IP> 1.3.6.1.2.1.25.6.3.1.2     # Software name
+snmpwalk -c public -v1 <target IP> 1.3.6.1.4.1.77.1.2.25      # User accounts
+snmpwalk -c public -v1 <target IP> 1.3.6.1.2.1.6.13.1.3       # TCP local port
+```
+
+
 
 
 # NFS

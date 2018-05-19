@@ -24,21 +24,17 @@
     * [Chapters/ NEW -Metasploit.md](Chapters/NEW-Metasploit.md)
     * [todoORnew/#TODO - DATABASES.md](todoORnew/#TODO-DATABASES.md)
     * [Chapters/Sort/TODO-NB-Pentesting with Kali](Chapters/Sort/TODO-NB-PentestingwithKali)
-
-
 * [The Basics](the_basics.md)
   * [Linux](linux.md)
     * [Basics of Linux](basics_of_linux.md)
     * [Bash-scripting](bash-scripting.md)
     * [new: bash check.md](Chapters/Linux/NEWbashCheck.md)
-    * [new: LINUX](Chapters/Linux/TODO - LINUX.md)
-
   * [Windows](windows.md)
     * [Basics of Windows](basics_of_windows.md)
     * [PowerShell](powershell.md)
     * [PowerShell Scripting](powershell_scripting2.md)
     * [CMD](cmd.md)
-    * [new](Chapters/Windows/TODO - windows.md)
+    * [new](Chapters/Windows/TODO-windows.md)
   * [Scripting With Python](scripting_with_python.md)
     * [Python Fundamentals](python_fundamentals.md)
     * [Useful Scripts](connections.md)
@@ -64,13 +60,13 @@
 * [Vulnerability analysis](vulnerability_analysi1s.md)
   * [Non-HTTP Vulnerabilities](server-side-vulnerabilities.md)
     * [Common ports\/services and how to use them](list_of_common_ports.md)
+    * [NEW: list_of_common_ports_EXTRAS.md](Chapters/OtherPorts/NEW-list_of_common_ports_EXTRAS.md)
     * [Port Knocking](port_knocking.md)
   * [HTTP - Web Vulnerabilities](web-services.md)
     * [Common Web-services](common_web-services.md)
     * Authentication
       * OAuth
     * [Session Management](session-management.md)
-      * Ses
     * [Broken Authentication or Session Management](broken_authentication_or_session_management.md)
     * [Session Fixation](session-fixation.md)
     * [WAF - Web Application Firewall](waf_-_web_application_firewall.md)
@@ -87,6 +83,10 @@
       * Directory Traversal Attack
       * [Host Header Attack](host-header-attack.md)
       * [Deserialization attacks](deserialization-attacks.md)
+      * [NEW:Chapters/WEB/NEW-WEBALL.md](Chapters/WEB/NEW-WEBALL.md)
+      * [NEW:Chapters/WEB/NEW-WebApps.md](Chapters/WEB/NEW-WebApps.md)
+      * [NEW:Chapters/WEB/TODO-burp.md](Chapters/WEB/TODO-burp.md)
+      * [NEW:Chapters/WEB/TODO-sqli.md](Chapters/WEB/TODO-sqli.md)
   * [Attacking the User](attacking_the_user.md)
     * [Clickjacking](clickjacking.md)
     * [Text/content-injection](text-injection.md)
@@ -108,6 +108,7 @@
   * [Generate Shellcode](create_shellcode.md)
   * [Editing Exploits](editing-exploits.md)
   * [Compiling windows exploits](compiling-windows-exploits.md)
+  * [Chapters/NEW-Metasploit.md](Chapters/NEW-Metasploit.md)
 * [Post Exploitation](post_exploitation.md)
   * [Spawning Shells](spawning_shells.md)
   * [Meterpreter for Post-Exploitation](getting_meterpreter_shell.md)
