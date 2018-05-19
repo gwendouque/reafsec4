@@ -1,6 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
+
 * [The Basics](the_basics.md)
   * [Linux](linux.md)
     * [Basics of Linux](basics_of_linux.md)
