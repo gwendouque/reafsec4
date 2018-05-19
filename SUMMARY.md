@@ -1,4 +1,3 @@
-# Summary
 
 * [Introduction](README.md)
 * [The Basics](the_basics.md)
@@ -7,6 +6,9 @@
     * [Bash-scripting](bash-scripting.md)
     * [Vim](vim.md)
     * [EXTRA:](linux.md)
+    * [How to pass the OSCP](# NEW - How to pass the OSCP.md)# Summary
+
+
   * [Windows](windows.md)
     * [Basics of Windows](basics_of_windows.md)
     * [PowerShell](powershell.md)
