@@ -6,7 +6,7 @@
     * [Bash-scripting](bash-scripting.md)
     * [Vim](vim.md)
     * [EXTRA:](linux.md)
-    * [How to pass the OSCP](# NEW - How to pass the OSCP.md)# Summary
+    * [How to pass the OSCP](# NEW - How to pass the OSCP.md)
 
 
   * [Windows](windows.md)
