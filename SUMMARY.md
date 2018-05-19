@@ -1,3 +1,4 @@
+# Summary
 
 * [Introduction](README.md)
 * [The Basics](the_basics.md)
@@ -5,10 +6,11 @@
     * [Basics of Linux](basics_of_linux.md)
     * [Bash-scripting](bash-scripting.md)
     * [Vim](vim.md)
-    * [EXTRA:](linux.md)
-    * [How to pass the OSCP](# NEW - How to pass the OSCP.md)
-
-
+    * [EXTRA:](NEW/Sure/ NEW -Metasploit.md)
+    * [Web Apps.md](NEW/Sure/ NEW - Web Apps.md)
+    * [BOF.md](NEW/Sure/NEW - TODO - BOF.md)
+    * [Bash](NEW/Sure/NEWbashCheck.md)
+    * [Oracle](NEW/Sure/TODO - Oracle.md)
   * [Windows](windows.md)
     * [Basics of Windows](basics_of_windows.md)
     * [PowerShell](powershell.md)
@@ -105,10 +107,4 @@
   * [WEP](wep.md)
   * [WPS](wps.md)
 * [Physical access to machine](physical_access_to_machine.md)
-* [new \# TODO - edwda.md](# TODO - edwda.md)
-* [KALI.md](# TODO - KALI.md)
-
-* [Paswords](# TODO - Paswords.md)
-
-
-
+* [Literature](littearature.md)
