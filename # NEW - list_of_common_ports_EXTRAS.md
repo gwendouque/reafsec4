@@ -3,6 +3,7 @@
 
 # Enumerating
 
+
 This is the essential part of penetration. Find out what is available and how you could punch through it with minimum ease.
 
 DO NOT SKIP STEPS.
@@ -29,6 +30,10 @@ SEARCH ***ALL*** THE VERSIONS WITH `searchsploit`
 ####--NEW--
 nmap --script=*ftp* --script-args=unsafe=1 -p 20,21 10.11.1.8
 
+Good article:
+```
+https://pentestlab.blog/2012/03/01/attacking-the-ftp-service/
+```
 
 # SSH - 22
 
