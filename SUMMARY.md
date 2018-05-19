@@ -6,7 +6,7 @@
     * [Basics of Linux](basics_of_linux.md)
     * [Bash-scripting](bash-scripting.md)
     * [Vim](vim.md)
-    * [EXTRA:](linux2.md)
+    * [EXTRA:](linux.md)
   * [Windows](windows.md)
     * [Basics of Windows](basics_of_windows.md)
     * [PowerShell](powershell.md)
@@ -103,9 +103,10 @@
   * [WEP](wep.md)
   * [WPS](wps.md)
 * [Physical access to machine](physical_access_to_machine.md)
-* [new # TODO - edwda.md](# TODO - edwda.md)
+* [new \# TODO - edwda.md](# TODO - edwda.md)
 * [KALI.md](# TODO - KALI.md)
 
 * [Paswords](# TODO - Paswords.md)
+
 
 
