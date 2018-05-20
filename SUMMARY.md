@@ -111,10 +111,11 @@
   * [Editing Exploits](editing-exploits.md)
   * [Compiling windows exploits](compiling-windows-exploits.md)
   * [NEW: Chapters/NEW-Metasploit.md](Chapters/NEW-Metasploit.md)
-  * [Chapters/Boof/bof2.md](Chapters/Boof/NEW-TODO-BOF.md)
+  * [NEW: Buffer Overflows](Chapters/Boof/bof-c.md)
+  * [NEW: Buffer Overflows 2](Chapters/Boof/NEW-TODO-BOF.md)
   * [NEW: More Buffer Overflows -](Chapters/Boof/bof2.md)
   * [NEW: Buffer Overflows - Tools](Chapters/Boof/BO-Tools.md)
-  
+
 * [Post Exploitation](post_exploitation.md)
   * [Spawning Shells](spawning_shells.md)
   * [Meterpreter for Post-Exploitation](getting_meterpreter_shell.md)
