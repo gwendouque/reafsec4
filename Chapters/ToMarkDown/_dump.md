@@ -1,4 +1,6 @@
 
+PSExec Demystified
+http://hackingandsecurity.blogspot.nl/2016/06/psexec-demystified.html
 
 OSCP command line cheat sheets:
 http://hackingandsecurity.blogspot.com/2016/04/oscp-related-notes.html?m=1
