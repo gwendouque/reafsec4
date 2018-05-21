@@ -1,4 +1,4 @@
-# Go-For-OSCP
+ NEW:Go4OSCP # Go-For-OSCP
 
 I want to share a couple of things that I think helped me preparing the Offensive Security Certified Professional - OSCP certification and what I found useful during the labs and exam. If you have any questions, feel free to contact me.
 

