@@ -1,6 +1,6 @@
-OSCP - Linux Priviledge Escalation
-Information Gathering
-+ Get OS information
+# OSCP - Linux Priviledge Escalation
+## Information Gathering
+####  Get OS information
 
 cat /etc/issue
 cat /etc/*-release
@@ -11,12 +11,12 @@ dmesg | grep Linux
 ls /boot | grep vmlinuz-
 lsb_release -a
 
-+ Check sudoers
+####  Check sudoers
 
 sudo -l
 cat /etc/sudoers
 
-+ Check password files
+####  Check password files
 Check for misconfigurations - i.e Is shadow readable? Is passwd writeable?
 
 cat /etc/passwd
@@ -24,7 +24,7 @@ cat /etc/shadow
 ls -l /etc/passwd
 ls -l /etc/shadow
 
-+ Learn your environment
+####  Learn your environment
 Search for misconfigured PATH variables. Do they prioritize searching for executable files from a non-secure (i.e. world-writeable) path?
 
 cat /etc/profile
@@ -36,12 +36,12 @@ cat ~/.bash_history
 env
 set
 
-+ Check history files
+####  Check history files
 You might find plaintext passwords in there
 
 cat ~/.*_history
 
-+ Check cronjobs
+####  Check cronjobs
 Search for jobs using programs that run with root privileges and are potentially write-accessible by low-privileged users
 
 crontab -l
@@ -57,32 +57,32 @@ cat /etc/crontab
 cat /etc/anacrontab
 cat /var/spool/cron/crontabs/root
 
-+ Check processes running as root for vulnerabilities
+####  Check processes running as root for vulnerabilities
 
 ps aux | grep root
 ps -ef | grep root
 
-+ Search files for plaintext credentials
+####  Search files for plaintext credentials
 
 grep -ir user *
 grep -ir pass *
 
-+ Find writable configuration files
+####  Find writable configuration files
 
 find /etc/ -writable -type f 2>/dev/null
 
-+ Run privesc scripts
+####  Run privesc scripts
 
 LinEnum - https://www.rebootuser.com/?p=1758
 linuxprivchecker.py - http://www.securitysift.com/download/linuxprivchecker.py
 unix-privesc-check - https://github.com/pentestmonkey/unix-privesc-check
 
-Escaping jail shells
+#### Escaping jail shells
 
 python -c 'import pty;pty.spawn("/bin/bash")'
 echo os.system('/bin/bash')
 /bin/sh -i
 
-Resources
+#### Resources
 https://www.kernel-exploits.com/
 https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/

