@@ -21,6 +21,7 @@
     * [Bash-scripting](bash-scripting.md)
     * [new: bash check.md](NEW_NEWbashCheck.md)
     * [NEW_TODO_LINUX.md](NEW_TODO_LINUX.md)
+    * [NEW_Bash.md](NEW_Bash.md)
   * [Windows](windows.md)
     * [Basics of Windows](basics_of_windows.md)
     * [PowerShell](powershell.md)

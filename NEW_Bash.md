@@ -26,6 +26,8 @@ To save the output of a program and see it as well:
 ####  wc
 To print the length and number of lines of a file:
                        - wc <FILENAME>
+----------------------------------------------------------
+
 ###  Modifying Files
 ####  true
 To make a file empty:
@@ -55,15 +57,26 @@ uniq remove adjacent duplicate lines. The flag -c can include a count:
                    - uniq -c <FILENAME>
 ```
 To output only duplicate lines:
+```
+
         - $ uniq -d <FILENAME>
+        ```
 ####  cut
 cut selects particular fields (columns) from a structured text files (or particular characters from each line of any text file). The flag -d specifies what delimiter should be used to divide columns (default is tab), the flag -f specifies which field or fields to print and in what order:
+
+```
                        - cut -d ' ' -f 2 <FILENAME>
+```
+
 The flag -c specifies a range of characters to output, so -c1-2 means to output only the first two characters of each line:
                        - cut -c1-2 <FILENAME>
 ####  join
 join combines multiple file by common delimited fields:
+```
                        - join <FILENAME1> <FILENAME2>
+```
+----------------------------------------------------------
+
 ###  Listing or Searching for Files. #NB
 ####  ls
   ls lists directory and files. Useful flags are -l to list the permissions of each file in the directory and -a to include the dot-files:
@@ -71,7 +84,9 @@ join combines multiple file by common delimited fields:
   To list files sorted by size:
          - ls -lrS
   To list the names of the 10 most recently modified files ending with .txt:
+  ```
          - ls -rt *.txt | tail -10
+```
 ####  tree
   The tree command lists contents of directories in a tree-like format.
         - find
@@ -110,7 +125,9 @@ For example, to remove lines that are not equal to a word:
   Copying directory trees is done with cp. The flag -a is used to preserve all metadata:
          - cp -a <ORIGIN> <DEST>
   Interestingly, commands enclosed in $() can be run and then the output of the commands is substituted for the clause and can be used as a part of another command line:
+  ```
          - cp $(ls -rt *.txt | tail -10) <DEST>
+```         
 ####  pushd and popd
   The pushd command saves the current working directory in memory so it can be returned to at any time, optionally changing to a new directory:
          - pushd ~/Desktop/
