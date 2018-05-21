@@ -19,13 +19,11 @@
     * [Chapters/WEB/TODO-burp.md](Chapters/WEB/TODO-burp.md)    
     * [Chapters/Windows/TODO - windows.md](Chapters/Windows/TODO-windows.md)
     * [Chapters/ NEW -Metasploit.md](Chapters/NEW-Metasploit.md)
-
-
+    * [NEW:Go4OSCP](Chapters/NEW/NS_Go4OSCP)
     * [_Chapters/Links/awesome-pentest.md](Chapters/Links/awesome-pentest.md)
     * [_Chapters/Links/NEW-Links.md](Chapters/Links/NEW-Links.md)
     * [_Chapters/Links/oscp_links.md](Chapters/Links/oscp_links.md)
     * [Chapters/Links/Bookmarks.md](Chapters/Links/Bookmarks.md)
-
 * [The Basics](the_basics.md)
   * [Linux](linux.md)
     * [Basics of Linux](basics_of_linux.md)
@@ -37,6 +35,7 @@
     * [PowerShell Scripting](powershell_scripting2.md)
     * [CMD](cmd.md)
     * [new](Chapters/Windows/TODO-windows.md)
+    * [NEW:awesomeWin](Chapters/NEW/awesomeWin)
   * [Scripting With Python](scripting_with_python.md)
     * [Python Fundamentals](python_fundamentals.md)
     * [Useful Scripts](connections.md)
@@ -74,6 +73,7 @@
     * [WAF - Web Application Firewall](waf_-_web_application_firewall.md)
     * [Attacking the System](lead_to_compromise.md)
       * [Local File Inclusion](local_file_inclusion.md)
+      * [Chapters/NEW/_LimitedAcces(LFIorShell)](Chapters/NEW/_LimitedAcces(LFIorShell))
       * [Remote File Inclusion](remote_file_inclusion.md)
       * [Directory Traversal Attack](directory-traversal-attack.md)
       * [Hidden Files and Directories](web-scanning.md)
@@ -89,6 +89,7 @@
       * [NEW:Chapters/WEB/NEW-WebApps.md](Chapters/WEB/NEW-WebApps.md)
       * [NEW:Chapters/WEB/TODO-sqli.md](Chapters/WEB/TODO-sqli.md)
       * [NEW:Chapters/WEB/TODO-burp.md](Chapters/WEB/TODO-burp.md)
+      * [NEW:Chapters/NEW/nbWEB](Chapters/NEW/nbWEB)
   * [Attacking the User](attacking_the_user.md)
     * [Clickjacking](clickjacking.md)
     * [Text/content-injection](text-injection.md)
@@ -115,7 +116,7 @@
   * [NEW: Buffer Overflows 2](Chapters/Boof/NEW-TODO-BOF.md)
   * [NEW: More Buffer Overflows -](Chapters/Boof/bof2.md)
   * [NEW: Buffer Overflows - Tools](Chapters/Boof/BO-Tools.md)
-
+  * [NEW: _exploits](Chapters/NEW/_exploits)
 * [Post Exploitation](post_exploitation.md)
   * [Spawning Shells](spawning_shells.md)
   * [Meterpreter for Post-Exploitation](getting_meterpreter_shell.md)
